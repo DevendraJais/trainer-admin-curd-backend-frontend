@@ -2,19 +2,25 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const fs = require("fs");
+const cors = require("cors")
+require('dotenv').config(); //npm install dotenv
 
 // Step-2: Create express app
 const app = express();
 
 // Step-3: Connect MongoDB
 mongoose
-  .connect("mongodb://127.0.0.1:27017/rest_assignment")
+  .connect(process.env.MONGODB_URL,{
+})
   .then(() => console.log("MongoDB Connected..."))
   .catch((err) => console.log("MongoDB Connection Error:", err));
 
 // Step-4: Middlewares
-app.use(express.json());         //convert the data in json foemay
+app.use(express.json());         //convert the data in json format
 app.use(express.urlencoded({ extended: false }));
+
+// middle ware who will handle the request from the frontend 
+app.use(cors());
 
 // Manual middleware example
 app.use((req, res, next) => {
@@ -108,7 +114,7 @@ app.delete("/api/admin/:id", async (req, res) => {
 });
 
 // ---------------------------------------------------------------------------
-// 🧑‍🏫 TRAINER COLLECTION
+// TRAINER COLLECTION
 // ---------------------------------------------------------------------------
 
 // Step-8: Trainer Schema
